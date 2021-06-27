@@ -1,0 +1,15 @@
+when HTTP_REQUEST {
+  switch HTTP::host {
+    {% for i in hosts %}
+    {{ i.name }} {
+      switch -glob [string tolower [HTTP::path]] {
+      {% for ii in paths %}
+        "{{ ii.name }}" {{ ii.action }} {{ ii.target }}
+      {{% endfor %}}
+        default { {{ defaultaction }} }
+      }
+    }
+    {% endfor %}
+    default { {{ defaultaction }} }
+  }
+}

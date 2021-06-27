@@ -1,0 +1,17 @@
+{
+   "name": {
+     "type": "string"
+   },
+   "kind": {
+     "type": "string"
+   },
+   "commentchar": {
+     "type": "string"
+   },
+   "hostname": {
+     "type": "string"
+   },
+   "interfaces": {
+      "type": "list"
+    }
+}
