@@ -6,6 +6,10 @@ Provide a declarative interface for designing and deploying common programmable 
 
 ## Overview
 
+Python code will ingest a simplified (abstracted) YAML definition outlining desired programmability rules, and then leverage Terraform to deploy iRule to TM-OS appliance.
+
+![Diagram](img/diagram.png)
+
 ### Unit Testing
 
 We want to construct *and automatically test* any non-factory (e.g. not provided by Jinja) capabilities to ensure quality is up to snuff. The approach here *MUST* be eminently testable.
