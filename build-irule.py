@@ -57,7 +57,7 @@ def validate_object(validate_object_object, validate_object_schema):
                 validate_object(validate_object_object[i], i)
             except Exception as e:
                 # This shouldn't crash anything, as we're performing recursion, but it might so let's suppress it.
-                sys.exit("E1401: Nested Validation Errors found with " + i + ":\n" + e + json.dumps(schema_validator.errors, indent=4))
+                sys.exit("E1401: Nested Validation Errors found with " + i + ":\n" + str(e) + json.dumps(schema_validator.errors, indent=4))
 
 
 # Arguments Parsing
