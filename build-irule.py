@@ -30,6 +30,21 @@ from cerberus import Validator
 
 from jinja2 import Environment, FileSystemLoader
 
+
+def validate_object(validate_object_object, validate_object_schema):
+    # Validate YAML Structure (body)
+    try:
+        with open("schema/" + validate_object_schema + ".json", 'r') as json_file:
+            validation_dict = json.loads(json_file.read())
+    except Exception as e:
+        sys.exit("E1300: Schema processing issue: " + str(e))
+    else:
+        schema_validator = Validator(validation_dict, require_all=True)
+        if not (schema_validator.validate(validate_object_object)):
+            # Provide intuitive errors on why it failed validation, pretty printed
+            sys.exit("E1400: Validation Errors found:\n" + json.dumps(schema_validator.errors, indent=4))
+
+
 # Arguments Parsing
 parser = argparse.ArgumentParser(description='Process YAML Inputs')
 parser.add_argument('-v', '--verbosity', action='count', default=0, help='Output Verbosity')
@@ -48,7 +63,6 @@ if(args.generate):
     # First, let's take the imported dictionary and populate it full of stuff
     populated_dict = copy.deepcopy(example_dict)
     populated_dict.pop('type', None)
-    schema_validator = Validator(example_dict, require_all=True)
 
     # Then, let's turn the output into a string
     output_output = yaml.dump(populated_dict)
@@ -95,16 +109,7 @@ elif(args.input):
             print("Valid YAML Found! Executing Template Actions...")
 
     # Validate YAML Structure (body)
-    try:
-        with open("schema/irule.json", 'r') as json_file:
-            validation_dict = json.loads(json_file.read())
-    except Exception as e:
-        sys.exit("E1300: Schema processing issue: " + str(e))
-    else:
-        schema_validator = Validator(validation_dict, require_all=True)
-        if not (schema_validator.validate(yaml_dict)):
-            # Provide intuitive errors on why it failed validation, pretty printed
-            sys.exit("E1400: Validation Errors found:\n" + json.dumps(schema_validator.errors, indent=4))
+    validate_object(yaml_dict, "irule")
 
     # Set Templates and Validators now that we know what to validate against
 
