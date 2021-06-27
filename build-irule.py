@@ -43,7 +43,6 @@ def validate_object(validate_object_object, validate_object_schema):
         # After that, let's see if there are any nested `lists` or `dicts` present
         for i in validate_object_object:
             try:
-                print(i)
                 validate_object(validate_object_object[i], i)
             except Exception as e:
                 # This shouldn't crash anything, as we're performing recursion, but it might so let's suppress it.
@@ -59,6 +58,8 @@ def validate_object(validate_object_object, validate_object_schema):
             if not (schema_validator.validate(validate_object_object)):
                 # Provide intuitive errors on why it failed validation, pretty printed
                 sys.exit("E1400: Validation Errors found:\n" + json.dumps(schema_validator.errors, indent=4))
+        for i in validate_object_object:
+            validate_object(validate_object_object[i], i)
 
 
 # Arguments Parsing
