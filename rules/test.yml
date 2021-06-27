@@ -1,0 +1,10 @@
+---
+aliases:
+  - name: "green"
+    value: "https://www.google.com"
+hosts:
+  - name: "www.google.com"
+    paths:
+      - name: "/abc"
+        action: "HTTP::redirect"
+        target: "green"

@@ -3,7 +3,7 @@ when HTTP_REQUEST {
     {% for i in hosts %}
     {{ i.name }} {
       switch -glob [string tolower [HTTP::path]] {
-      {% for ii in paths %}
+      {% for ii in hosts.paths %}
         "{{ ii.name }}" {{ ii.action }} {{ ii.target }}
       {{% endfor %}}
         default { {{ defaultaction }} }
