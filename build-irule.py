@@ -42,10 +42,10 @@ def validate_object(validate_object_object, validate_object_schema):
     elif type(validate_object_object) in [list]:
         # After that, let's see if there are any nested `lists` or `dicts` present
         for i in validate_object_object:
+            print(str(i) + " " + str(validate_object_schema))
             try:
-                validate_object(validate_object_object[i], i)
+                validate_object(i, validate_object_schema)
             except Exception as e:
-                # This shouldn't crash anything, as we're performing recursion, but it might so let's suppress it.
                 sys.exit("E1401: Nested Validation Errors found with " + str(i) + ":\n" + str(e))
     elif type(validate_object_object) is dict:
         try:

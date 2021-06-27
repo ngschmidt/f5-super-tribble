@@ -2,7 +2,7 @@
     "name": {
       "type": "string"
     },
-    "value": {
-      "type": "string"
+    "paths": {
+      "type": "list"
     }
  }
