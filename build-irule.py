@@ -33,7 +33,7 @@ from jinja2 import Environment, FileSystemLoader
 # Arguments Parsing
 parser = argparse.ArgumentParser(description='Process YAML Inputs')
 parser.add_argument('-v', '--verbosity', action='count', default=0, help='Output Verbosity')
-parser.add_argument('-g', '--generate', help='Generate a device file to customize.')
+parser.add_argument('-g', '--generate', action='store_true', help='Generate a device file to customize.')
 parser.add_argument('-o', '--output', help='Output file')
 parser.add_argument('-i', '--input', help='Input. Pass this a YAML file')
 args = parser.parse_args()
@@ -47,14 +47,8 @@ if(args.generate):
         sys.exit("E1200: JSON Load failure: " + str(e))
     # First, let's take the imported dictionary and populate it full of stuff
     populated_dict = copy.deepcopy(example_dict)
-    populated_dict.pop('type')
-
-    # Then, we validate it by parsing the YAML and validating the dict
-    # Validate YAML Structure (body)
+    populated_dict.pop('type', None)
     schema_validator = Validator(example_dict, require_all=True)
-    if not (schema_validator.validate(populated_dict)):
-        # Provide intuitive errors on why it failed validation, pretty printed
-        sys.exit("E1400: Validation Errors found:\n" + json.dumps(schema_validator.errors, indent=4))
 
     # Then, let's turn the output into a string
     output_output = yaml.dump(populated_dict)
