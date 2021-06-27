@@ -31,6 +31,7 @@ from cerberus import Validator
 from jinja2 import Environment, FileSystemLoader
 
 
+# Recursive function that provides Cerberus validation to nested objects
 def validate_object(validate_object_object, validate_object_schema):
     # First, let's make sure we're validating an object of the right type
     if type(validate_object_object) not in [list, dict]:
@@ -42,7 +43,6 @@ def validate_object(validate_object_object, validate_object_schema):
     elif type(validate_object_object) in [list]:
         # After that, let's see if there are any nested `lists` or `dicts` present
         for i in validate_object_object:
-            print(str(i) + " " + str(validate_object_schema))
             try:
                 validate_object(i, validate_object_schema)
             except Exception as e:
