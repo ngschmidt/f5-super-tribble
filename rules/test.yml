@@ -1,4 +1,5 @@
 ---
+defaultaction: "discard"
 aliases:
   - name: "green"
     value: "https://www.google.com"

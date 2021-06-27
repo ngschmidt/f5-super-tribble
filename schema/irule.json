@@ -1,8 +1,11 @@
 {
    "aliases": {
-     "type": "dict"
+     "type": "list"
    },
    "hosts": {
      "type": "list"
+   },
+   "defaultaction": {
+     "type": "string"
    }
 }
