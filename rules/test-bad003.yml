@@ -1,0 +1,11 @@
+---
+defaultaction: "discard"
+aliases:
+  - name: "green"
+    value: "https://www.google.com"
+hosts:
+  - name: "www.google.com"
+    paths:
+      - name: "/abc"
+        actione: "HTTP::redirect"
+        target: "green"

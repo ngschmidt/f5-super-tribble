@@ -39,7 +39,16 @@ def validate_object(validate_object_object, validate_object_schema):
     elif len(validate_object_object) < 1:
         pass
     # Now that we know we're working with a `list` or `dict` with a length > 0, let's validate it.
-    else:
+    elif type(validate_object_object) in [list]:
+        # After that, let's see if there are any nested `lists` or `dicts` present
+        for i in validate_object_object:
+            try:
+                print(i)
+                validate_object(validate_object_object[i], i)
+            except Exception as e:
+                # This shouldn't crash anything, as we're performing recursion, but it might so let's suppress it.
+                sys.exit("E1401: Nested Validation Errors found with " + str(i) + ":\n" + str(e))
+    elif type(validate_object_object) is dict:
         try:
             with open("schema/" + validate_object_schema + ".json", 'r') as json_file:
                 validation_dict = json.loads(json_file.read())
@@ -50,14 +59,6 @@ def validate_object(validate_object_object, validate_object_schema):
             if not (schema_validator.validate(validate_object_object)):
                 # Provide intuitive errors on why it failed validation, pretty printed
                 sys.exit("E1400: Validation Errors found:\n" + json.dumps(schema_validator.errors, indent=4))
-        # After that, let's see if there are any nested `lists` or `dicts` present
-        for i in validate_object_object:
-            try:
-                print(i)
-                validate_object(validate_object_object[i], i)
-            except Exception as e:
-                # This shouldn't crash anything, as we're performing recursion, but it might so let's suppress it.
-                sys.exit("E1401: Nested Validation Errors found with " + i + ":\n" + str(e) + json.dumps(schema_validator.errors, indent=4))
 
 
 # Arguments Parsing
