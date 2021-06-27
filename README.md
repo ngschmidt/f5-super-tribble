@@ -1,5 +1,7 @@
 # F5 iRule Management
 
+[![Code style: black](https://img.shields.io/badge/code%20style-black-000000.svg)](https://github.com/psf/black)
+
 ## Goal
 
 Provide a declarative interface for designing and deploying common programmable logic to a virtual service.
