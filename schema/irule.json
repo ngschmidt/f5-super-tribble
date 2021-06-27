@@ -1,17 +1,8 @@
 {
-   "name": {
-     "type": "string"
+   "aliases": {
+     "type": "dict"
    },
-   "kind": {
-     "type": "string"
-   },
-   "commentchar": {
-     "type": "string"
-   },
-   "hostname": {
-     "type": "string"
-   },
-   "interfaces": {
-      "type": "list"
-    }
+   "hosts": {
+     "type": "list"
+   }
 }
