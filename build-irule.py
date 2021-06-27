@@ -32,17 +32,32 @@ from jinja2 import Environment, FileSystemLoader
 
 
 def validate_object(validate_object_object, validate_object_schema):
-    # Validate YAML Structure (body)
-    try:
-        with open("schema/" + validate_object_schema + ".json", 'r') as json_file:
-            validation_dict = json.loads(json_file.read())
-    except Exception as e:
-        sys.exit("E1300: Schema processing issue: " + str(e))
+    # First, let's make sure we're validating an object of the right type
+    if type(validate_object_object) not in [list, dict]:
+        pass
+    # Second, let's make sure it's big enough to validate
+    elif len(validate_object_object) < 1:
+        pass
+    # Now that we know we're working with a `list` or `dict` with a length > 0, let's validate it.
     else:
-        schema_validator = Validator(validation_dict, require_all=True)
-        if not (schema_validator.validate(validate_object_object)):
-            # Provide intuitive errors on why it failed validation, pretty printed
-            sys.exit("E1400: Validation Errors found:\n" + json.dumps(schema_validator.errors, indent=4))
+        try:
+            with open("schema/" + validate_object_schema + ".json", 'r') as json_file:
+                validation_dict = json.loads(json_file.read())
+        except Exception as e:
+            sys.exit("E1300: Schema processing issue: " + str(e))
+        else:
+            schema_validator = Validator(validation_dict, require_all=True)
+            if not (schema_validator.validate(validate_object_object)):
+                # Provide intuitive errors on why it failed validation, pretty printed
+                sys.exit("E1400: Validation Errors found:\n" + json.dumps(schema_validator.errors, indent=4))
+        # After that, let's see if there are any nested `lists` or `dicts` present
+        for i in validate_object_object:
+            try:
+                print(i)
+                validate_object(validate_object_object[i], i)
+            except Exception as e:
+                # This shouldn't crash anything, as we're performing recursion, but it might so let's suppress it.
+                sys.exit("E1401: Nested Validation Errors found with " + i + ":\n" + e + json.dumps(schema_validator.errors, indent=4))
 
 
 # Arguments Parsing
@@ -135,3 +150,4 @@ elif(args.input):
             sys.exit("Error writing to file! " + str(e))
     else:
         print(output_output)
+validate_object({}, "irule")
