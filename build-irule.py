@@ -9,12 +9,8 @@ import argparse
 # Import System calls
 import sys
 
-# Dictionary replication tools
-import copy
-
 # YAML. Used for human inputs
 
-import yaml
 from ruamel.yaml import YAML
 from ruamel.yaml import scanner
 
@@ -52,7 +48,9 @@ def validate_object(validate_object_object, validate_object_schema):
                     + ":\n"
                     + str(e)
                 )
+    # Cerberus validates dicts, so this is where the actual validation happens
     elif type(validate_object_object) is dict:
+        # Schema to validate against should exist in the `schemas` directory
         try:
             with open("schema/" + validate_object_schema + ".json", "r") as json_file:
                 validation_dict = json.loads(json_file.read())
@@ -75,38 +73,12 @@ parser = argparse.ArgumentParser(description="Process YAML Inputs")
 parser.add_argument(
     "-v", "--verbosity", action="count", default=0, help="Output Verbosity"
 )
-parser.add_argument(
-    "-g", "--generate", action="store_true", help="Generate a device file to customize."
-)
 parser.add_argument("-o", "--output", help="Output file")
 parser.add_argument("-i", "--input", help="Input. Pass this a YAML file")
 args = parser.parse_args()
 
-# Generate a file for a user to build on
-if args.generate:
-    try:
-        with open("schema/irule.json", "r") as json_file:
-            example_dict = json.loads(json_file.read())
-    except Exception as e:
-        sys.exit("E1200: JSON Load failure: " + str(e))
-    # First, let's take the imported dictionary and populate it full of stuff
-    populated_dict = copy.deepcopy(example_dict)
-    populated_dict.pop("type", None)
 
-    # Then, let's turn the output into a string
-    output_output = yaml.dump(populated_dict)
-    print(output_output)
-
-    # Optionally Write all that to a file
-    if args.output:
-        try:
-            filehandle = open(args.output, "w")
-            filehandle.write(output_output)
-            filehandle.close()
-        except Exception as e:
-            sys.exit("E1500: Error writing to file! " + str(e))
-    sys.exit()
-elif args.input:
+if args.input:
     # Load Templates folder as Jinja2 root
     local_env = Environment(loader=FileSystemLoader("templates"))
 
